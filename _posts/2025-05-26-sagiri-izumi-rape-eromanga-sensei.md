@@ -2,7 +2,7 @@
 layout: post
 title:  "Sagiri Izumi Rape | Eromanga sensei"
 author: admin
-categories: [ Eromanga sensei ]
+categories: [ Eromanga Sensei ]
 image: https://cdn.uqni.net/images/365/Hentai/Eromanga%20Sensei/02/01.jpg
 ---
 
