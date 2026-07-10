@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} - {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  <!-- Simple Lightbox CSS via CDN (External Third-Party Requirement) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.3/simple-lightbox.min.css">
+
+  <!-- INTEGRASI POPADS MANAGER DI HEADER -->
+  {% if site.popads_manager.enabled %}
+  <script type="text/javascript">
+    {{ site.popads_manager.script_code }}
+  </script>
+  {% endif %}
+</head>
+<body>
+
+  <main class="container">
+    <!-- 1. Judul Postingan & Metadata Kategori/Tag -->
+    <header class="post-header">
+      <span class="category-badge">{{ page.category | upcase }}</span>
+      <h1>{{ page.title }}</h1>
+      <div class="post-tags">
+        {% for tag in page.tags %}
+          <span class="tag-item">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </header>
+
+    <!-- 2. Blok Multi-Video Embed (Susunan grid rata tengah) -->
+    {% if page.videos %}
+    <section class="video-gallery-container">
+      <div class="video-grid-flex">
+        {% for video in page.videos %}
+          <div class="video-item-card">
+            <h4>{{ video.title }}</h4>
+            {% if video.ratio == "16-9" %}
+              <div class="video-wrapper-16-9">
+                <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
+              </div>
+            {% elsif video.ratio == "9-16" %}
+              <div class="video-wrapper-9-16">
+                <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- 3. Blok Deskripsi Konten & Kredit Kreator -->
+    <article class="post-content">
+      {{ content }}
+    </article>
+
+    <!-- 4. Tombol Download Pack (Conditional Rendering) -->
+    {% if page.download_link and page.download_link != "" %}
+    <div class="download-section">
+      <a href="{{ page.download_link }}" target="_blank" rel="noopener noreferrer" class="btn-download">
+        <span>📥 Download Full Content Pack</span>
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- 5. Grid Galeri Foto Masonry (Terintegrasi Lightbox) -->
+    {% if page.images %}
+    <section class="gallery-section">
+      <h3>Photo Gallery</h3>
+      <div class="masonry-gallery">
+        {% for img_url in page.images %}
+          <div class="masonry-item">
+            <a href="{{ img_url }}" class="lightbox-trigger">
+              <img src="{{ img_url }}" alt="Gallery Asset {{ forloop.index }}" loading="lazy">
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <!-- Scripts: Lightbox & Lazy Load Video -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.3/simple-lightbox.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Initialize Lightbox (Mendukung Swipe & Keyboard Navigasi Mobile-First)
+      new SimpleLightbox('.masonry-gallery a', { 
+        overlayOpacity: 0.9,
+        animationSpeed: 200,
+        fadeSpeed: 200
+      });
+
+      // Lazy Loading Video Iframe (Meningkatkan skor PageSpeed)
+      const lazyVideos = document.querySelectorAll('.lazy-video');
+      if ('IntersectionObserver' in window) {
+        const videoObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              let iframe = entry.target;
+              iframe.src = iframe.dataset.src;
+              observer.unobserve(iframe);
+            }
+          });
+        });
+        lazyVideos.forEach(video => videoObserver.observe(video));
+      } else {
+        lazyVideos.forEach(video => video.src = video.dataset.src);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,35 +1,101 @@
 ---
 layout: default
-title: Home
+title: "Home - CosShowcase Gallery"
 ---
 
-<!-- Posts Index
-================================================== -->
-<section class="recent-posts">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title }} - Portofolio & Galeri Cosplay</title>
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  
+  {% if site.popads_manager.enabled %}
+  <script type="text/javascript">
+    {{ site.popads_manager.script_code }}
+  </script>
+  {% endif %}
+</head>
+<body>
 
-    <div class="section-title">
-
-        <h2><span>All Stories</span></h2>
-
+  <!-- Menu Navigasi & Filter Kategori Sesuai PRD -->
+  <header class="main-navigation">
+    <div class="nav-container">
+      <a href="{{ '/' | relative_url }}" class="brand-logo">{{ site.title }}</a>
+      <nav class="nav-categories">
+        <a href="{{ '/' | relative_url }}" class="active">Semua</a>
+        <a href="{{ '/category/indo/' | relative_url }}">Indo</a>
+        <a href="{{ '/category/gravure/' | relative_url }}">Gravure</a>
+        <a href="{{ '/category/fans-premium/' | relative_url }}">Fans Premium</a>
+        <a href="{{ '/category/aktris-profesional/' | relative_url }}">Aktris</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="row listrecent">
+  <main class="container">
 
-        {% for post in paginator.posts %}
-
-        {% include postbox.html %}
-
-        {% endfor %}
-
-    </div>
-
-</section>
-
-<!-- Pagination
-================================================== -->
-<div class="bottompagination">
-<div class="pointerup"><i class="fa fa-caret-up"></i></div>
-<span class="navigation" role="navigation">
-    {% include pagination.html %}
-</span>
+<div class="search-wrapper">
+  <input type="text" id="cosplaySearch" placeholder="Cari nama cosplayer, karakter, atau tag...">
 </div>
+
+    <!-- Grid Postingan Terpaginasi -->
+    <section class="homepage-grid">
+      {% for post in paginator.posts %}
+        <article class="post-card">
+          <a href="{{ post.url | relative_url }}">
+            <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
+              <span class="card-badge">{{ post.category | upcase }}</span>
+            </div>
+            <div class="card-details">
+              <h2>{{ post.title }}</h2>
+              <span class="card-date">{{ post.date | date: "%d %B %Y" }}</span>
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </section>
+
+    <!-- Komponen Navigasi Halaman (Pagination Buttons) -->
+    {% if paginator.total_pages > 1 %}
+    <nav class="pagination-container">
+      {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path | relative_url }}" class="pag-btn">« Prev</a>
+      {% else %}
+        <span class="pag-btn disabled">« Prev</span>
+      {% endif %}
+
+      <span class="page-number">Halaman {{ paginator.page }} dari {{ paginator.total_pages }}</span>
+
+      {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}" class="pag-btn">Next »</a>
+      {% else %}
+        <span class="pag-btn disabled">Next »</span>
+      {% endif %}
+    </nav>
+    {% endif %}
+  </main>
+
+
+<script>
+  document.getElementById('cosplaySearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let posts = document.querySelectorAll('.post-card');
+
+    posts.forEach(function(post) {
+      // Mengambil teks dari Judul dan Badge Kategori/Tag di dalam kartu
+      let title = post.querySelector('h2').textContent.toLowerCase();
+      let badge = post.querySelector('.card-badge').textContent.toLowerCase();
+      
+      // Jika teks cocok, tampilkan kartu. Jika tidak, sembunyikan.
+      if (title.includes(filter) || badge.includes(filter)) {
+        post.style.display = "";
+      } else {
+        post.style.display = "none";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

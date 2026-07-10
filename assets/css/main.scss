@@ -1,15 +1,253 @@
 ---
-# Add a comment to make this file sass-y.
-# Change this file for any custom CSS.
 ---
+/* Variabel Warna Sesuai PRD */
+$bg-dark: #121214;
+$bg-card: #1e1e24;
+$text-light: #f3f4f6;
+$accent-pink: #f472b6;
+$accent-blue: #38bdf8;
 
-/* We need to add display:inline in order to align the '>>' of the 'read more' link */
-.post-excerpt p {
-	display:inline;
+/* Base Reset & Theme Dark Mode */
+body {
+  background-color: $bg-dark;
+  color: $text-light;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-// Import partials from `sass_dir` (defaults to `_sass`)
-@import
-	"syntax",
-    "starsnonscss"
-;
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header & Metadata */
+.post-header {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  .category-badge {
+    background-color: $accent-blue;
+    color: $bg-dark;
+    padding: 5px 12px;
+    font-weight: bold;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  
+  h1 {
+    color: #ffffff;
+    margin: 15px 0;
+  }
+  
+  .tag-item {
+    color: $accent-pink;
+    margin: 0 5px;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- Blueprint CSS Tata Letak Video Rata Tengah (Sesuai PRD) --- */
+.video-gallery-container {
+  display: block;
+  margin: 25px auto;
+  max-width: 800px;
+  width: 100%;
+}
+.video-grid-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Memaksa item rata tengah */
+  gap: 20px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.video-item-card {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  background: $bg-card;
+  padding: 15px;
+  border-radius: 12px;
+  
+  h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: $text-light;
+  }
+}
+.video-wrapper-16-9 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* Rasio 16:9 */
+  height: 0;
+  margin: 0 auto 10px auto;
+}
+.video-wrapper-9-16 {
+  position: relative;
+  width: 100%;
+  max-width: 360px; /* Batasan desktop agar tidak terlalu membesar */
+  padding-bottom: 177.78%; /* Rasio 9:16 */
+  height: 0;
+  margin: 0 auto 10px auto;
+}
+.video-wrapper-16-9 iframe,
+.video-wrapper-9-16 iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* Deskripsi Konten */
+.post-content {
+  line-height: 1.6;
+  margin: 30px auto;
+  max-width: 750px;
+  color: #d1d5db;
+}
+
+/* Download Button Modern */
+.download-section {
+  text-align: center;
+  margin: 35px 0;
+  
+  .btn-download {
+    display: inline-block;
+    background: linear-gradient(135deg, $accent-pink, $accent-blue);
+    color: #ffffff;
+    padding: 14px 30px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+    }
+  }
+}
+
+/* CSS Masonry Gallery (100% External Asset Safe) */
+.masonry-gallery {
+  column-count: 2; /* Default Mobile */
+  column-gap: 15px;
+  width: 100%;
+  
+  .masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: $bg-card;
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s;
+      
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+}
+
+/* Integration Modul Iklan Style */
+.ads-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px auto;
+  min-height: 90px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 728px;
+}
+
+/* Responsive Breakpoints (Tablet & Desktop) */
+@media (min-width: 768px) {
+  .masonry-gallery {
+    column-count: 3; /* Layout merapat di layar desktop */
+  }
+  .video-grid-flex {
+    flex-direction: row;
+  }
+  .video-item-card {
+    width: calc(50% - 10px); /* Membagi 2 kolom jika ada beberapa video di desktop */
+  }
+}
+
+/* --- Style Navigasi Paginasi Halaman --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0 0 0;
+  gap: 15px;
+  font-size: 0.9rem;
+}
+
+.pag-btn {
+  background-color: $bg-card;
+  color: $text-light;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover:not(.disabled) {
+    background-color: $accent-pink;
+    color: #ffffff;
+    border-color: $accent-pink;
+    box-shadow: 0 0 10px rgba(244, 114, 182, 0.5);
+  }
+
+  &.disabled {
+    color: #4b5563;
+    cursor: not-allowed;
+    border-color: transparent;
+  }
+}
+
+.page-number {
+  color: #9ca3af;
+}
+
+.search-wrapper {
+  margin: 30px auto 10px auto;
+  max-width: 100%;
+  
+  input {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: $bg-card;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    color: $text-light;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: $accent-blue;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+  }
+}
