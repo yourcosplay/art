@@ -20,12 +20,12 @@
     <div class="nav-container">
       <a href="{{ '/' | relative_url }}" class="brand-logo">Cos<span>Showcase</span></a>
       <nav class="nav-categories">
-        <a class="active">Semua</a>
-        <a>Indo</a>
-        <a>Gravure</a>
-        <a>Fans Premium</a>
-        <a>Aktris Profesional</a>
-      </nav>
+  <a href="{{ '/' | relative_url }}" data-filter="semua" class="active">Semua</a>
+  <a href="{{ '/?cat=indo' | relative_url }}" data-filter="indo">Indo</a>
+  <a href="{{ '/?cat=gravure' | relative_url }}" data-filter="gravure">Gravure</a>
+  <a href="{{ '/?cat=fans-premium' | relative_url }}" data-filter="fans-premium">Fans Premium</a>
+  <a href="{{ '/?cat=aktris-profesional' | relative_url }}" data-filter="aktris-profesional">Aktris</a>
+</nav>
     </div>
   </header>
 

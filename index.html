@@ -33,17 +33,18 @@ title: "Home - CosShowcase Gallery"
     const categoryLinks = document.querySelectorAll('.nav-categories a');
     const posts = document.querySelectorAll('.post-card');
     
-    let currentCategory = 'semua';
+    // 1. Baca URL saat halaman pertama dimuat untuk melihat apakah ada filter aktif
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentCategory = urlParams.get('cat') || 'semua';
     let searchQuery = '';
 
     function filterPosts() {
       posts.forEach(function(post) {
         let postTitle = post.querySelector('h2').textContent.toLowerCase();
-        let postBadge = post.querySelector('.card-badge').textContent.toLowerCase().replace(/\s+/g, '-');
         let postCategory = post.getAttribute('data-category');
 
-        let matchSearch = postTitle.includes(searchQuery) || postBadge.includes(searchQuery);
-        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory) || (postBadge === currentCategory);
+        let matchSearch = postTitle.includes(searchQuery);
+        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory);
 
         if (matchSearch && matchCategory) {
           post.style.display = "";
@@ -51,8 +52,21 @@ title: "Home - CosShowcase Gallery"
           post.style.display = "none";
         }
       });
+
+      // 2. Update warna tombol menu yang sedang aktif
+      categoryLinks.forEach(link => {
+        if (link.getAttribute('data-filter') === currentCategory) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
     }
 
+    // Jalankan penyaringan otomatis saat masuk ke halaman utama
+    filterPosts();
+
+    // 3. Event Kolom Pencarian
     if (searchInput) {
       searchInput.addEventListener('input', function() {
         searchQuery = this.value.toLowerCase().trim();
@@ -60,17 +74,19 @@ title: "Home - CosShowcase Gallery"
       });
     }
 
+    // 4. Event Klik Kategori (Instan tanpa reload jika sudah di halaman utama)
     categoryLinks.forEach(function(link) {
       link.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        categoryLinks.forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-
-        let targetText = this.textContent.toLowerCase().trim().replace(/\s+/g, '-');
-        currentCategory = (targetText === 'semua') ? 'semua' : targetText;
-        
-        filterPosts();
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname === '/art/') {
+          e.preventDefault();
+          currentCategory = this.getAttribute('data-filter');
+          
+          // Ubah URL secara visual tanpa memuat ulang halaman (lebih elegan)
+          const newUrl = currentCategory === 'semua' ? '/' : '/?cat=' + currentCategory;
+          window.history.pushState({}, '', newUrl);
+          
+          filterPosts();
+        }
       });
     });
   });

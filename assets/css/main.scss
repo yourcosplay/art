@@ -200,22 +200,50 @@ body {
 }
 
 /* ========================================================
-   FIX LIGHTBOX MOBILE MAKSIMAL (Sintaks Flat Aman dari Error)
+   FIX LIGHTBOX (Latar Gelap & Center Mobile Presisi)
    ======================================================== */
+
+/* 1. Latar Belakang Menjadi Hitam Gelap Premium */
+.sl-overlay {
+  background: #08080a !important; /* Warna hitam studio */
+  opacity: 0.98 !important;
+}
+
+/* Menghapus border bawaan yang berwarna putih */
 .sl-wrapper .sl-image img {
   border: none !important;
   padding: 0 !important;
+  background: transparent !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
+
+/* 2. Penyesuaian Mobile: Gambar Penuh dan Tepat di Tengah */
 @media (max-width: 767px) {
   .sl-wrapper .sl-image {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
+  
   .sl-wrapper .sl-image img {
     width: 100% !important;
     height: auto !important;
+    max-height: 100vh !important;
+    object-fit: contain !important; /* Mencegah gambar gepeng */
+    margin: 0 auto !important;
+  }
+
+  /* Ikon close agar lebih jelas di atas latar gelap */
+  .sl-close {
+    color: #ffffff !important;
+    z-index: 10060 !important;
   }
 }
