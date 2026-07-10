@@ -171,3 +171,24 @@ body {
     column-gap: 16px;
   }
 }
+
+/* --- Kustomisasi Ukuran Gambar Lightbox Maksimal di Mobile --- */
+.sl-wrapper {
+  .sl-image {
+    img {
+      border: none !important;
+      padding: 0 !important; /* Menghapus padding bawaan agar gambar lebih besar */
+    }
+  }
+  .sl-close, .sl-navigation button {
+    color: #ffffff !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .sl-wrapper .sl-image {
+    max-width: 100% !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}

@@ -4,7 +4,7 @@ title: "Home - CosShowcase Gallery"
 ---
 
 <main class="container">
-  <!-- Kolom Pencarian Premium (Aman untuk Mobile & Tidak Melar) -->
+  <!-- Kolom Pencarian Premium -->
   <div class="search-wrapper">
     <input type="text" id="cosplaySearch" placeholder="Cari nama cosplayer, karakter, atau tag...">
   </div>
@@ -12,7 +12,8 @@ title: "Home - CosShowcase Gallery"
   <!-- Grid Postingan -->
   <section class="homepage-grid">
     {% for post in site.posts %}
-      <article class="post-card">
+      <!-- Kita tambahkan data-category untuk dibaca oleh JavaScript filter -->
+      <article class="post-card" data-category="{{ post.category | slugify }}">
         <a href="{{ post.url | relative_url }}">
           <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
             <span class="card-badge">{{ post.category | replace: '-', ' ' | upcase }}</span>
@@ -27,21 +28,61 @@ title: "Home - CosShowcase Gallery"
   </section>
 </main>
 
-<!-- Script Pencarian Real-Time Instan -->
+<!-- Script Gabungan: Filter Kategori & Pencarian Real-Time -->
 <script>
-  document.getElementById('cosplaySearch').addEventListener('input', function() {
-    let filter = this.value.toLowerCase().trim();
-    let posts = document.querySelectorAll('.post-card');
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('cosplaySearch');
+    const categoryLinks = document.querySelectorAll('.nav-categories a');
+    const posts = document.querySelectorAll('.post-card');
+    
+    let currentCategory = 'semua';
+    let searchQuery = '';
 
-    posts.forEach(function(post) {
-      let title = post.querySelector('h2').textContent.toLowerCase();
-      let badge = post.querySelector('.card-badge').textContent.toLowerCase();
-      
-      if (title.indexOf(filter) > -1 || badge.indexOf(filter) > -1) {
-        post.style.display = ""; // Tampilkan jika cocok
-      } else {
-        post.style.display = "none"; // Sembunyikan jika tidak cocok
-      }
+    // Fungsi inti penyaringan data
+    function filterPosts() {
+      posts.forEach(function(post) {
+        let postTitle = post.querySelector('h2').textContent.toLowerCase();
+        let postBadge = post.querySelector('.card-badge').textContent.toLowerCase();
+        let postCategory = post.getAttribute('data-category');
+
+        let matchSearch = postTitle.includes(searchQuery) || postBadge.includes(searchQuery);
+        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory);
+
+        if (matchSearch && matchCategory) {
+          post.style.display = "";
+        } else {
+          post.style.display = "none";
+        }
+      });
+    }
+
+    // 1. Logika Event Input Pencarian
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        searchQuery = this.value.toLowerCase().trim();
+        filterPosts();
+      });
+    }
+
+    // 2. Logika Event Klik Menu Kategori
+    categoryLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        // Ambil teks menu untuk dijadikan acuan filter
+        let targetText = this.textContent.toLowerCase().trim().replace(' ', '-');
+        
+        // Cek jika ini adalah halaman utama, jalankan filter instant script
+        // Jika link mengarah ke halaman statis lain, biarkan browser berpindah halaman
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/')) {
+          e.preventDefault();
+          
+          // Ubah status aktif tombol menu
+          categoryLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+
+          currentCategory = (targetText === 'semua') ? 'semua' : targetText;
+          filterPosts();
+        }
+      });
     });
   });
 </script>
