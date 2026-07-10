@@ -3,95 +3,45 @@ layout: default
 title: "Home - CosShowcase Gallery"
 ---
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ site.title }}</title>
-  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-  
-  {% if site.popads_manager.enabled %}
-  <script type="text/javascript">
-    {{ site.popads_manager.script_code }}
-  </script>
-  {% endif %}
-</head>
-<body>
+<main class="container">
+  <!-- Kolom Pencarian Premium (Aman untuk Mobile & Tidak Melar) -->
+  <div class="search-wrapper">
+    <input type="text" id="cosplaySearch" placeholder="Cari nama cosplayer, karakter, atau tag...">
+  </div>
 
-  <header class="main-navigation">
-    <div class="nav-container">
-      <a href="{{ '/' | relative_url }}" class="brand-logo">Cos<span>Showcase</span></a>
-      <nav class="nav-categories">
-        <a href="{{ '/' | relative_url }}" class="active">Semua</a>
-        <a href="{{ '/category/indo/' | relative_url }}">Indo</a>
-        <a href="{{ '/category/gravure/' | relative_url }}">Gravure</a>
-        <a href="{{ '/category/fans-premium/' | relative_url }}">Fans Premium</a>
-        <a href="{{ '/category/aktris-profesional/' | relative_url }}">Aktris</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Grid Postingan -->
+  <section class="homepage-grid">
+    {% for post in site.posts %}
+      <article class="post-card">
+        <a href="{{ post.url | relative_url }}">
+          <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
+            <span class="card-badge">{{ post.category | replace: '-', ' ' | upcase }}</span>
+          </div>
+          <div class="card-details">
+            <h2>{{ post.title }}</h2>
+            <span class="card-date">{{ post.date | date: "%d %B %Y" }}</span>
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  </section>
+</main>
 
-  <main class="container">
-    <!-- Kolom Pencarian Premium -->
-    <div class="search-wrapper">
-      <input type="text" id="cosplaySearch" placeholder="Cari nama cosplayer, karakter, atau tag...">
-    </div>
+<!-- Script Pencarian Real-Time Instan -->
+<script>
+  document.getElementById('cosplaySearch').addEventListener('input', function() {
+    let filter = this.value.toLowerCase().trim();
+    let posts = document.querySelectorAll('.post-card');
 
-    <!-- Grid Postingan Terpaginasi -->
-    <section class="homepage-grid">
-      {% for post in paginator.posts %}
-        <article class="post-card">
-          <a href="{{ post.url | relative_url }}">
-            <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
-              <span class="card-badge">{{ post.category | replace: '-', ' ' | upcase }}</span>
-            </div>
-            <div class="card-details">
-              <h2>{{ post.title }}</h2>
-              <span class="card-date">{{ post.date | date: "%d %B %Y" }}</span>
-            </div>
-          </a>
-        </article>
-      {% endfor %}
-    </section>
-
-    <!-- Navigasi Halaman -->
-    {% if paginator.total_pages > 1 %}
-    <nav class="pagination-container">
-      {% if paginator.previous_page %}
-        <a href="{{ paginator.previous_page_path | relative_url }}" class="pag-btn">« Previous</a>
-      {% else %}
-        <span class="pag-btn disabled">« Previous</span>
-      {% endif %}
-
-      <span class="page-number">{{ paginator.page }} / {{ paginator.total_pages }}</span>
-
-      {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}" class="pag-btn">Next »</a>
-      {% else %}
-        <span class="pag-btn disabled">Next »</span>
-      {% endif %}
-    </nav>
-    {% endif %}
-  </main>
-
-  <!-- Script Filter Real-Time Pencarian Client-Side -->
-  <script>
-    document.getElementById('cosplaySearch').addEventListener('keyup', function() {
-      let filter = this.value.toLowerCase();
-      let posts = document.querySelectorAll('.post-card');
-
-      posts.forEach(function(post) {
-        let title = post.querySelector('h2').textContent.toLowerCase();
-        let badge = post.querySelector('.card-badge').textContent.toLowerCase();
-        
-        if (title.includes(filter) || badge.includes(filter)) {
-          post.style.display = "";
-        } else {
-          post.style.display = "none";
-        }
-      });
+    posts.forEach(function(post) {
+      let title = post.querySelector('h2').textContent.toLowerCase();
+      let badge = post.querySelector('.card-badge').textContent.toLowerCase();
+      
+      if (title.indexOf(filter) > -1 || badge.indexOf(filter) > -1) {
+        post.style.display = ""; // Tampilkan jika cocok
+      } else {
+        post.style.display = "none"; // Sembunyikan jika tidak cocok
+      }
     });
-  </script>
-</body>
-</html>
+  });
+</script>

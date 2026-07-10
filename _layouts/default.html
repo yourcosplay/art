@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{{ page.title }} - {{ site.title }}</title>
+  
+  <!-- Memanggil CSS Utama -->
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  
+  <!-- Memanggil Simple Lightbox CSS untuk Galeri Foto -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.3/simple-lightbox.min.css">
+
+  <!-- POPADS MANAGER DI HEADER GLOBAL -->
+  {% if site.popads_manager.enabled %}
+  <script type="text/javascript">
+    {{ site.popads_manager.script_code }}
+  </script>
+  {% endif %}
+</head>
+<body>
+
+  <!-- Menu Navigasi Atas yang Responsif -->
+  <header class="main-navigation">
+    <div class="nav-container">
+      <a href="{{ '/' | relative_url }}" class="brand-logo">Cos<span>Showcase</span></a>
+      <nav class="nav-categories">
+        <a href="{{ '/' | relative_url }}">Semua</a>
+        <a href="{{ '/category/indo/' | relative_url }}">Indo</a>
+        <a href="{{ '/category/gravure/' | relative_url }}">Gravure</a>
+        <a href="{{ '/category/fans-premium/' | relative_url }}">Fans Premium</a>
+        <a href="{{ '/category/aktris-profesional/' | relative_url }}">Aktris</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Tempat di mana konten index.html atau gallery.html dimasukkan -->
+  {{ content }}
+
+  <!-- Script Global Lightbox -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.3/simple-lightbox.min.js"></script>
+</body>
+</html>
