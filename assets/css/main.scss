@@ -1,46 +1,48 @@
 ---
 ---
 /* ========================================================
-   CSS REVISI TOTAL - ANTI MELAR & MOBILE RESPONSIVE SAFE
+   PREMIUM DARK MODE - ANTI-LEAK MOBILE MASTER STYLING
    ======================================================== */
 
-$bg-main: #0a0a0c;
-$bg-surface: #121215;
-$bg-input: #1a1a22;
-$border-color: #22222a;
-$text-primary: #f3f4f6;
-$text-secondary: #9ca3af;
-$accent-brand: #38bdf8;
+$bg-main: #121214;        /* Sesuai PRD: Abu-abu pekat premium */
+$bg-surface: #1a1a22;     
+$bg-input: #22222a;       
+$border-color: #2a2a35;   
+$text-primary: #f3f4f6;   
+$text-secondary: #9ca3af; 
+$accent-brand: #38bdf8;   /* Biru Cyberpunk */
 
+/* KUNCI UTAMA: Memaksa semua elemen menghitung lebar secara aman dari dalam */
 * {
-  box-sizing: border-box !important; /* Memaksa semua elemen menghitung lebar secara aman */
+  box-sizing: border-box !important;
 }
 
 body {
   background-color: $bg-main;
   color: $text-primary;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Mencegah layar bisa digeser ke kanan/kiri (anti-bocor) */
+  overflow-x: hidden; /* Mengunci total pergeseran liar kanan-kiri di HP */
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px; /* Jarak aman tepi layar HP */
+  padding: 0 16px; /* Jarak aman tepi layar smartphone */
 }
 
-/* Navigasi Atas (Mobile Friendly Hamburger-less/Scrollable) */
+/* Navigasi Header Atas */
 .main-navigation {
-  background-color: #121215;
+  background-color: $bg-surface;
   border-bottom: 1px solid $border-color;
   width: 100%;
   
   .nav-container {
     display: flex;
-    flex-direction: column; /* Baris menumpuk di mobile agar muat */
+    flex-direction: column;
     align-items: center;
     padding: 12px 16px;
     gap: 10px;
@@ -48,7 +50,7 @@ body {
   
   .brand-logo {
     color: #ffffff;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 700;
     text-decoration: none;
     span { color: $accent-brand; }
@@ -56,8 +58,8 @@ body {
   
   .nav-categories {
     display: flex;
-    gap: 12px;
-    overflow-x: auto; /* Jika kategori kepanjangan di HP, bisa di-swipe ke samping */
+    gap: 14px;
+    overflow-x: auto;
     width: 100%;
     justify-content: center;
     padding-bottom: 4px;
@@ -68,11 +70,12 @@ body {
       color: $text-secondary;
       text-decoration: none;
       font-size: 0.85rem;
+      font-weight: 500;
     }
   }
 }
 
-/* Kolom Pencarian Fix Tidak Melar */
+/* Kolom Pencarian */
 .search-wrapper {
   margin: 20px 0;
   width: 100%;
@@ -94,108 +97,77 @@ body {
   }
 }
 
-/* Grid Kartu Utama (Mobile = 1 Kolom) */
-.homepage-grid {
-  display: grid;
-  grid-template-columns: 1fr; /* 1 Kolom penuh di HP */
-  gap: 20px;
-  width: 100%;
-}
-
-.post-card {
-  background-color: $bg-surface;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid $border-color;
+/* Header Detail Post */
+.post-header {
+  text-align: center;
+  margin: 35px 0 25px 0;
   
-  a { text-decoration: none; color: inherit; display: block; }
-  
-  .card-thumb {
-    height: 200px;
-    background-size: cover;
-    background-position: center;
+  .category-badge {
+    color: $accent-brand;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
   }
-  
-  .card-details {
-    padding: 16px;
-    h2 { font-size: 1.1rem; margin: 0 0 8px 0; color: #ffffff; }
-    .card-date { font-size: 0.8rem; color: $text-secondary; }
+  h1 {
+    font-size: 1.75rem;
+    color: #ffffff;
+    margin: 10px 0;
+    line-height: 1.3;
+  }
+  .tag-item {
+    color: $text-secondary;
+    margin: 0 4px;
+    font-size: 0.8rem;
   }
 }
 
-/* --- Blueprint Video Embed Rata Tengah Premium --- */
-.video-gallery-container {
-  width: 100%;
-  margin: 20px 0;
-}
-.video-grid-flex {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0;
-  margin: 0;
-}
-.video-item-card {
-  width: 100%;
-  background: $bg-surface;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid $border-color;
-  h4 { margin: 0 0 12px 0; color: #ffffff; }
-}
-.video-wrapper-16-9 { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
-.video-wrapper-9-16 { position: relative; width: 100%; max-width: 320px; padding-bottom: 177.78%; height: 0; margin: 0 auto; }
-.video-wrapper-16-9 iframe, .video-wrapper-9-16 iframe {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px;
+/* Konten Deskripsi */
+.post-content {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 25px 0;
+  color: #d1d5db;
 }
 
-/* Detail Gallery Masonry */
+/* Grid Galeri Masonry Responsif */
 .masonry-gallery {
-  column-count: 2; /* 2 Kolom foto berdampingan di HP */
-  column-gap: 10px;
+  column-count: 2; /* Otomatis membagi menjadi 2 kolom rapi di HP */
+  column-gap: 12px;
+  width: 100%;
+  margin-top: 15px;
   
   .masonry-item {
     display: inline-block;
     width: 100%;
-    margin-bottom: 10px;
-    img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    margin-bottom: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid $border-color;
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
   }
 }
 
-/* Tombol Download */
-.download-section .btn-download {
-  display: block;
-  width: 100%;
-  background-color: #ffffff;
-  color: #000;
-  text-align: center;
-  padding: 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-/* ========================================================
-   MEDIA BREAKPOINTS (KUNCI UTAMA RESPONSIVITAS DESKTOP)
-   ======================================================== */
+/* Penyesuaian Tampilan untuk Layar Lebar (Desktop/Tablet) */
 @media (min-width: 768px) {
   .main-navigation .nav-container {
-    flex-direction: row; /* Berjajar horizontal di komputer */
+    flex-direction: row;
     justify-content: space-between;
-    height: 70px;
+    height: 65px;
+    padding: 0 24px;
   }
   .main-navigation .nav-categories {
     width: auto;
   }
-  .homepage-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 Kolom di Komputer */
+  .post-header h1 {
+    font-size: 2.25rem;
   }
-  .video-grid-flex {
-    flex-direction: row; /* Video berdampingan di layar besar */
-    flex-wrap: wrap;
-  }
-  .video-item-card { width: calc(50% - 10px); }
   .masonry-gallery {
-    column-count: 3; /* 3 Kolom foto di Komputer */
+    column-count: 3; /* Menjadi 3 kolom di komputer desktop */
+    column-gap: 16px;
   }
 }

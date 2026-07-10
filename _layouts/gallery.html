@@ -3,7 +3,6 @@ layout: default
 ---
 
 <main class="container">
-  <!-- 1. Judul & Metadata -->
   <header class="post-header">
     <span class="category-badge">// {{ page.category | upcase }}</span>
     <h1>{{ page.title }}</h1>
@@ -14,7 +13,6 @@ layout: default
     </div>
   </header>
 
-  <!-- 2. Blok Multi-Video Embed Rata Tengah -->
   {% if page.videos %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
@@ -36,12 +34,10 @@ layout: default
   </section>
   {% endif %}
 
-  <!-- 3. Deskripsi Konten -->
   <article class="post-content">
     {{ content }}
   </article>
 
-  <!-- 4. Tombol Download Pack -->
   {% if page.download_link and page.download_link != "" %}
   <div class="download-section">
     <a href="{{ page.download_link }}" target="_blank" rel="noopener noreferrer" class="btn-download">
@@ -50,7 +46,6 @@ layout: default
   </div>
   {% endif %}
 
-  <!-- 5. Grid Galeri Foto Masonry -->
   {% if page.images %}
   <section class="gallery-section">
     <h3>Portfolio Gallery</h3>
@@ -69,25 +64,12 @@ layout: default
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Inisialisasi Lightbox
-    if(document.querySelector('.masonry-gallery a')) {
-      new SimpleLightbox('.masonry-gallery a', { overlayOpacity: 0.95, fadeSpeed: 150 });
-    }
-
-    // Lazy Load Video
-    const lazyVideos = document.querySelectorAll('.lazy-video');
-    if ('IntersectionObserver' in window) {
-      const videoObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            let iframe = entry.target;
-            iframe.src = iframe.dataset.src;
-            observer.unobserve(iframe);
-          }
-        });
+    // Inisialisasi Jendela Modal Lightbox secara mulus
+    if (document.querySelector('.masonry-gallery a')) {
+      new SimpleLightbox('.masonry-gallery a', { 
+        overlayOpacity: 0.95, 
+        fadeSpeed: 150 
       });
-      lazyVideos.forEach(video => videoObserver.observe(video));
-    } else {
-      lazyVideos.forEach(video => video.src = video.dataset.src);
     }
-  </script>
+  });
+</script>
