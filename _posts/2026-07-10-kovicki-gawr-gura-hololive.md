@@ -3,9 +3,8 @@ layout: gallery
 title: "Kovicki cosplay Gawr Gura - Hololive "
 category: gravure
 tags: [Gawr-Gura, Hololive, Kovicki]
-
-# 1. Gambar Sampul Depan di Halaman Utama (Wajib Link Eksternal / Direct URL)
-featured_image: " https://cdn.uqni.net/images/365/Kovicki/Gawr%20Gura/01.webp"
+image: https://cdn.uqni.net/images/365/Kovicki/Gawr%20Gura/01.webp
+---
 
 # 4. Daftar Gambar Galeri (Semua otomatis masuk ke sistem Lightbox & Masonry Grid)
 images:
