@@ -1,18 +1,17 @@
 ---
 ---
 /* ========================================================
-   PREMIUM DARK MODE - ANTI-LEAK MOBILE MASTER STYLING
+   PREMIUM DARK MODE - SOLID & CLEAN SYSTEM
    ======================================================== */
 
-$bg-main: #121214;        /* Sesuai PRD: Abu-abu pekat premium */
-$bg-surface: #1a1a22;     
-$bg-input: #22222a;       
-$border-color: #2a2a35;   
+$bg-main: #0a0a0c;        
+$bg-surface: #121215;     
+$bg-input: #1a1a22;       
+$border-color: #22222a;   
 $text-primary: #f3f4f6;   
 $text-secondary: #9ca3af; 
-$accent-brand: #38bdf8;   /* Biru Cyberpunk */
+$accent-brand: #38bdf8;   
 
-/* KUNCI UTAMA: Memaksa semua elemen menghitung lebar secara aman dari dalam */
 * {
   box-sizing: border-box !important;
 }
@@ -23,7 +22,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Mengunci total pergeseran liar kanan-kiri di HP */
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -31,7 +30,7 @@ body {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px; /* Jarak aman tepi layar smartphone */
+  padding: 0 16px;
 }
 
 /* Navigasi Header Atas */
@@ -71,6 +70,14 @@ body {
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 500;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      
+      &.active, &:hover {
+        color: #ffffff;
+        background-color: $bg-input;
+      }
     }
   }
 }
@@ -97,31 +104,45 @@ body {
   }
 }
 
+/* Grid Kartu Utama */
+.homepage-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.post-card {
+  background-color: $bg-surface;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid $border-color;
+  
+  a { text-decoration: none; color: inherit; display: block; }
+  
+  .card-thumb {
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .card-details {
+    padding: 16px;
+    h2 { font-size: 1.1rem; margin: 0 0 8px 0; color: #ffffff; line-height: 1.4; }
+    .card-date { font-size: 0.8rem; color: $text-secondary; }
+  }
+}
+
 /* Header Detail Post */
 .post-header {
   text-align: center;
   margin: 35px 0 25px 0;
   
-  .category-badge {
-    color: $accent-brand;
-    font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-  }
-  h1 {
-    font-size: 1.75rem;
-    color: #ffffff;
-    margin: 10px 0;
-    line-height: 1.3;
-  }
-  .tag-item {
-    color: $text-secondary;
-    margin: 0 4px;
-    font-size: 0.8rem;
-  }
+  .category-badge { color: $accent-brand; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; }
+  h1 { font-size: 1.75rem; color: #ffffff; margin: 10px 0; line-height: 1.3; }
+  .tag-item { color: $text-secondary; margin: 0 4px; font-size: 0.8rem; }
 }
 
-/* Konten Deskripsi */
 .post-content {
   font-size: 0.95rem;
   line-height: 1.6;
@@ -131,7 +152,7 @@ body {
 
 /* Grid Galeri Masonry Responsif */
 .masonry-gallery {
-  column-count: 2; /* Otomatis membagi menjadi 2 kolom rapi di HP */
+  column-count: 2;
   column-gap: 12px;
   width: 100%;
   margin-top: 15px;
@@ -144,51 +165,57 @@ body {
     overflow: hidden;
     border: 1px solid $border-color;
     
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    img { width: 100%; height: auto; display: block; }
   }
 }
 
-/* Penyesuaian Tampilan untuk Layar Lebar (Desktop/Tablet) */
+/* Tombol Download */
+.download-section .btn-download {
+  display: block; width: 100%; background-color: #ffffff; color: #000;
+  text-align: center; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: 600;
+}
+
+/* Multi-Video Layout */
+.video-gallery-container { width: 100%; margin: 20px 0; }
+.video-grid-flex { display: flex; flex-direction: column; gap: 16px; padding: 0; margin: 0; }
+.video-item-card {
+  width: 100%; background: $bg-surface; padding: 12px; border-radius: 8px; border: 1px solid $border-color;
+  h4 { margin: 0 0 12px 0; color: #ffffff; }
+}
+.video-wrapper-16-9 { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
+.video-wrapper-9-16 { position: relative; width: 100%; max-width: 320px; padding-bottom: 177.78%; height: 0; margin: 0 auto; }
+.video-wrapper-16-9 iframe, .video-wrapper-9-16 iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
+
+/* ========================================================
+   MEDIA BREAKPOINTS (DESKTOP OPTIMIZATION)
+   ======================================================== */
 @media (min-width: 768px) {
-  .main-navigation .nav-container {
-    flex-direction: row;
-    justify-content: space-between;
-    height: 65px;
-    padding: 0 24px;
-  }
-  .main-navigation .nav-categories {
-    width: auto;
-  }
-  .post-header h1 {
-    font-size: 2.25rem;
-  }
-  .masonry-gallery {
-    column-count: 3; /* Menjadi 3 kolom di komputer desktop */
-    column-gap: 16px;
-  }
+  .main-navigation .nav-container { flex-direction: row; justify-content: space-between; height: 65px; padding: 0 24px; }
+  .main-navigation .nav-categories { width: auto; }
+  .homepage-grid { grid-template-columns: repeat(3, 1fr); }
+  .post-header h1 { font-size: 2.25rem; }
+  .masonry-gallery { column-count: 3; column-gap: 16px; }
+  .video-grid-flex { flex-direction: row; flex-wrap: wrap; }
+  .video-item-card { width: calc(50% - 8px); }
 }
 
-/* --- Kustomisasi Ukuran Gambar Lightbox Maksimal di Mobile --- */
-.sl-wrapper {
-  .sl-image {
-    img {
-      border: none !important;
-      padding: 0 !important; /* Menghapus padding bawaan agar gambar lebih besar */
-    }
-  }
-  .sl-close, .sl-navigation button {
-    color: #ffffff !important;
-  }
+/* ========================================================
+   FIX LIGHTBOX MOBILE MAKSIMAL (Sintaks Flat Aman dari Error)
+   ======================================================== */
+.sl-wrapper .sl-image img {
+  border: none !important;
+  padding: 0 !important;
 }
-
 @media (max-width: 767px) {
   .sl-wrapper .sl-image {
+    width: 100% !important;
+    height: auto !important;
     max-width: 100% !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
+  }
+  .sl-wrapper .sl-image img {
+    width: 100% !important;
+    height: auto !important;
   }
 }

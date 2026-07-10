@@ -12,7 +12,6 @@ title: "Home - CosShowcase Gallery"
   <!-- Grid Postingan -->
   <section class="homepage-grid">
     {% for post in site.posts %}
-      <!-- Kita tambahkan data-category untuk dibaca oleh JavaScript filter -->
       <article class="post-card" data-category="{{ post.category | slugify }}">
         <a href="{{ post.url | relative_url }}">
           <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
@@ -28,7 +27,6 @@ title: "Home - CosShowcase Gallery"
   </section>
 </main>
 
-<!-- Script Gabungan: Filter Kategori & Pencarian Real-Time -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('cosplaySearch');
@@ -38,15 +36,14 @@ title: "Home - CosShowcase Gallery"
     let currentCategory = 'semua';
     let searchQuery = '';
 
-    // Fungsi inti penyaringan data
     function filterPosts() {
       posts.forEach(function(post) {
         let postTitle = post.querySelector('h2').textContent.toLowerCase();
-        let postBadge = post.querySelector('.card-badge').textContent.toLowerCase();
+        let postBadge = post.querySelector('.card-badge').textContent.toLowerCase().replace(/\s+/g, '-');
         let postCategory = post.getAttribute('data-category');
 
         let matchSearch = postTitle.includes(searchQuery) || postBadge.includes(searchQuery);
-        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory);
+        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory) || (postBadge === currentCategory);
 
         if (matchSearch && matchCategory) {
           post.style.display = "";
@@ -56,7 +53,6 @@ title: "Home - CosShowcase Gallery"
       });
     }
 
-    // 1. Logika Event Input Pencarian
     if (searchInput) {
       searchInput.addEventListener('input', function() {
         searchQuery = this.value.toLowerCase().trim();
@@ -64,24 +60,17 @@ title: "Home - CosShowcase Gallery"
       });
     }
 
-    // 2. Logika Event Klik Menu Kategori
     categoryLinks.forEach(function(link) {
       link.addEventListener('click', function(e) {
-        // Ambil teks menu untuk dijadikan acuan filter
-        let targetText = this.textContent.toLowerCase().trim().replace(' ', '-');
+        e.preventDefault();
         
-        // Cek jika ini adalah halaman utama, jalankan filter instant script
-        // Jika link mengarah ke halaman statis lain, biarkan browser berpindah halaman
-        if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/')) {
-          e.preventDefault();
-          
-          // Ubah status aktif tombol menu
-          categoryLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
+        categoryLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
 
-          currentCategory = (targetText === 'semua') ? 'semua' : targetText;
-          filterPosts();
-        }
+        let targetText = this.textContent.toLowerCase().trim().replace(/\s+/g, '-');
+        currentCategory = (targetText === 'semua') ? 'semua' : targetText;
+        
+        filterPosts();
       });
     });
   });
