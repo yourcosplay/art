@@ -29,10 +29,10 @@ body {
   padding: 0 24px;
 }
 
-/* Navigasi Header Profesional */
+/* Navigasi Header Premium */
 .main-navigation {
   background-color: rgba(18, 18, 21, 0.85);
-  backdrop-filter: blur(12px); /* Efek kaca transparan premium */
+  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
@@ -72,26 +72,34 @@ body {
   }
 }
 
-/* Kolom Pencarian Premium */
+/* Perbaikan Kolom Pencarian Premium (Mobile-First Safe) */
 .search-wrapper {
-  margin: 40px auto 20px auto;
-  position: relative;
+  margin: 30px 0 15px 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
   
   input {
     width: 100%;
-    padding: 16px 24px;
+    padding: 14px 20px;
     background-color: $bg-input;
     border: 1px solid $border-color;
     border-radius: 8px;
     color: #ffffff;
     font-size: 0.95rem;
     box-sizing: border-box;
+    display: block;
     transition: all 0.2s ease;
     
     &:focus {
       outline: none;
       border-color: $accent-brand;
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    
+    &::placeholder {
+      color: $text-secondary;
+      opacity: 0.6;
     }
   }
 }
@@ -293,7 +301,8 @@ body {
 @media (min-width: 640px) { .homepage-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { 
   .homepage-grid { grid-template-columns: repeat(3, 1fr); } 
+  .search-wrapper { margin: 40px 0 20px 0; }
   .masonry-gallery { column-count: 3; }
-  .video-item-card { width: calc(50% - 12px); }
+  .video-item-card { width: calc(50-12px); }
   .video-grid-flex { flex-direction: row; }
 }
