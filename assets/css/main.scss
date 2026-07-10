@@ -1,253 +1,299 @@
 ---
 ---
-/* Variabel Warna Sesuai PRD */
-$bg-dark: #121214;
-$bg-card: #1e1e24;
-$text-light: #f3f4f6;
-$accent-pink: #f472b6;
-$accent-blue: #38bdf8;
+/* ==========================================
+   PREMIUM DARK MODE - PROFESSIONAL SYSTEM
+   ========================================== */
 
-/* Base Reset & Theme Dark Mode */
+/* Arsitektur Warna & Font */
+$bg-main: #0a0a0c;        /* Hitam legam studio, sangat kontras untuk foto */
+$bg-surface: #121215;     /* Warna kartu & navigasi (elegan terangkat) */
+$bg-input: #1a1a22;       /* Warna kolom pencarian */
+$border-color: #22222a;   /* Garis pembatas tipis yang samar */
+$text-primary: #f3f4f6;   /* Putih susu, nyaman dibaca */
+$text-secondary: #9ca3af; /* Abu-abu satin untuk metadata */
+$accent-brand: #38bdf8;   /* Safir elektrik (aksen minimalis) */
+
 body {
-  background-color: $bg-dark;
-  color: $text-light;
-  font-family: 'Arial', sans-serif;
+  background-color: $bg-main;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 24px;
 }
 
-/* Header & Metadata */
+/* Navigasi Header Profesional */
+.main-navigation {
+  background-color: rgba(18, 18, 21, 0.85);
+  backdrop-filter: blur(12px); /* Efek kaca transparan premium */
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid $border-color;
+  
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    padding: 0 24px;
+  }
+  
+  .brand-logo {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    span { color: $accent-brand; }
+  }
+  
+  .nav-categories a {
+    color: $text-secondary;
+    text-decoration: none;
+    margin-left: 24px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    
+    &:hover, &.active {
+      color: #ffffff;
+    }
+  }
+}
+
+/* Kolom Pencarian Premium */
+.search-wrapper {
+  margin: 40px auto 20px auto;
+  position: relative;
+  
+  input {
+    width: 100%;
+    padding: 16px 24px;
+    background-color: $bg-input;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: $accent-brand;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+  }
+}
+
+/* Homepage Grid Portfolio Studio (3 Kolom Seimbang) */
+.homepage-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.post-card {
+  background-color: $bg-surface;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid $border-color;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+  
+  a { text-decoration: none; color: inherit; }
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .card-thumb {
+    height: 260px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  .card-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: rgba(10, 10, 12, 0.75);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  
+  .card-details {
+    padding: 20px;
+    
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+    
+    .card-date {
+      font-size: 0.8rem;
+      color: $text-secondary;
+    }
+  }
+}
+
+/* Detail Post Header */
 .post-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin: 50px 0 40px 0;
   
   .category-badge {
-    background-color: $accent-blue;
-    color: $bg-dark;
-    padding: 5px 12px;
-    font-weight: bold;
-    border-radius: 20px;
+    color: $accent-brand;
+    font-weight: 600;
     font-size: 0.8rem;
+    letter-spacing: 1.5px;
   }
-  
   h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
     color: #ffffff;
-    margin: 15px 0;
+    margin: 12px 0 16px 0;
+    letter-spacing: -0.5px;
   }
-  
   .tag-item {
-    color: $accent-pink;
-    margin: 0 5px;
-    font-size: 0.9rem;
+    color: $text-secondary;
+    margin: 0 6px;
+    font-size: 0.85rem;
   }
 }
 
 /* --- Blueprint CSS Tata Letak Video Rata Tengah (Sesuai PRD) --- */
 .video-gallery-container {
   display: block;
-  margin: 25px auto;
-  max-width: 800px;
+  margin: 30px auto;
+  max-width: 850px;
   width: 100%;
 }
 .video-grid-flex {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Memaksa item rata tengah */
-  gap: 20px;
-  margin: 0 auto;
+  justify-content: center;
+  gap: 24px;
   padding: 0;
   list-style: none;
 }
 .video-item-card {
-  display: block;
-  margin: 0 auto;
   width: 100%;
-  max-width: 100%;
   text-align: center;
-  background: $bg-card;
-  padding: 15px;
-  border-radius: 12px;
-  
-  h4 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: $text-light;
-  }
+  background: $bg-surface;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  box-sizing: border-box;
+  h4 { margin: 0 0 16px 0; color: #ffffff; font-weight: 500; }
 }
 .video-wrapper-16-9 {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* Rasio 16:9 */
-  height: 0;
-  margin: 0 auto 10px auto;
+  position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin: 0 auto;
 }
 .video-wrapper-9-16 {
-  position: relative;
-  width: 100%;
-  max-width: 360px; /* Batasan desktop agar tidak terlalu membesar */
-  padding-bottom: 177.78%; /* Rasio 9:16 */
-  height: 0;
-  margin: 0 auto 10px auto;
+  position: relative; width: 100%; max-width: 360px; padding-bottom: 177.78%; height: 0; margin: 0 auto;
 }
-.video-wrapper-16-9 iframe,
-.video-wrapper-9-16 iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: 8px;
+.video-wrapper-16-9 iframe, .video-wrapper-9-16 iframe {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px;
 }
 
-/* Deskripsi Konten */
+/* Konten Deskripsi */
 .post-content {
-  line-height: 1.6;
-  margin: 30px auto;
-  max-width: 750px;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 40px auto;
   color: #d1d5db;
 }
 
-/* Download Button Modern */
+/* Tombol Unduhan Minimalis-Mewah */
 .download-section {
   text-align: center;
-  margin: 35px 0;
+  margin: 40px 0;
   
   .btn-download {
     display: inline-block;
-    background: linear-gradient(135deg, $accent-pink, $accent-blue);
-    color: #ffffff;
-    padding: 14px 30px;
-    font-weight: bold;
+    background-color: #ffffff;
+    color: $bg-main;
+    padding: 14px 36px;
+    font-weight: 600;
+    font-size: 0.9rem;
     text-decoration: none;
-    border-radius: 50px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
     
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+      background-color: #e5e7eb;
     }
   }
 }
 
-/* CSS Masonry Gallery (100% External Asset Safe) */
+/* Galeri Foto Masonry Profesional */
+.gallery-section h3 {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+  border-bottom: 1px solid $border-color;
+  padding-bottom: 12px;
+}
 .masonry-gallery {
-  column-count: 2; /* Default Mobile */
-  column-gap: 15px;
-  width: 100%;
+  column-count: 2;
+  column-gap: 16px;
   
   .masonry-item {
     display: inline-block;
     width: 100%;
-    margin-bottom: 15px;
-    border-radius: 8px;
+    margin-bottom: 16px;
+    border-radius: 6px;
     overflow: hidden;
-    background-color: $bg-card;
+    background-color: $bg-surface;
+    border: 1px solid $border-color;
     
     img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.3s;
-      
-      &:hover {
-        transform: scale(1.03);
-      }
+      width: 100%; height: auto; display: block;
+      transition: opacity 0.2s ease;
+      &:hover { opacity: 0.85; cursor: zoom-in; }
     }
   }
 }
 
-/* Integration Modul Iklan Style */
-.ads-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 25px auto;
-  min-height: 90px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  width: 100%;
-  max-width: 728px;
-}
-
-/* Responsive Breakpoints (Tablet & Desktop) */
-@media (min-width: 768px) {
-  .masonry-gallery {
-    column-count: 3; /* Layout merapat di layar desktop */
-  }
-  .video-grid-flex {
-    flex-direction: row;
-  }
-  .video-item-card {
-    width: calc(50% - 10px); /* Membagi 2 kolom jika ada beberapa video di desktop */
-  }
-}
-
-/* --- Style Navigasi Paginasi Halaman --- */
+/* Paginasi Minimalis */
 .pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px 0 0 0;
-  gap: 15px;
-  font-size: 0.9rem;
+  display: flex; justify-content: center; align-items: center; margin: 50px 0; gap: 20px;
 }
-
 .pag-btn {
-  background-color: $bg-card;
-  color: $text-light;
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-
-  &:hover:not(.disabled) {
-    background-color: $accent-pink;
-    color: #ffffff;
-    border-color: $accent-pink;
-    box-shadow: 0 0 10px rgba(244, 114, 182, 0.5);
-  }
-
-  &.disabled {
-    color: #4b5563;
-    cursor: not-allowed;
-    border-color: transparent;
-  }
+  background-color: $bg-surface; color: $text-primary; padding: 10px 20px;
+  text-decoration: none; border-radius: 6px; border: 1px solid $border-color;
+  font-size: 0.85rem; font-weight: 500;
+  &:hover:not(.disabled) { background-color: $bg-input; color: #ffffff; }
+  &.disabled { color: #4b5563; border-color: transparent; cursor: not-allowed; }
 }
 
-.page-number {
-  color: #9ca3af;
-}
-
-.search-wrapper {
-  margin: 30px auto 10px auto;
-  max-width: 100%;
-  
-  input {
-    width: 100%;
-    padding: 14px 20px;
-    background-color: $bg-card;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    color: $text-light;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-    
-    &:focus {
-      outline: none;
-      border-color: $accent-blue;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-    }
-  }
+/* Media Queries Responsif */
+@media (min-width: 640px) { .homepage-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { 
+  .homepage-grid { grid-template-columns: repeat(3, 1fr); } 
+  .masonry-gallery { column-count: 3; }
+  .video-item-card { width: calc(50% - 12px); }
+  .video-grid-flex { flex-direction: row; }
 }
