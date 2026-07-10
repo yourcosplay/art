@@ -64,12 +64,95 @@ layout: default
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Inisialisasi Jendela Modal Lightbox secara mulus
+    let lightboxInstance = null;
+    let slideshowInterval = null;
+    let isSlideshowActive = false;
+    const slideshowDuration = 3000; // Duration in milliseconds (3 seconds)
+
+    function startSlideshow() {
+      isSlideshowActive = true;
+      document.getElementById('sl-play-btn').classList.add('playing');
+      document.getElementById('sl-play-btn').innerHTML = '⏸ Stop Auto';
+      
+      slideshowInterval = setInterval(() => {
+        if (lightboxInstance) {
+          lightboxInstance.next();
+        }
+      }, slideshowDuration);
+    }
+
+    function stopSlideshow() {
+      isSlideshowActive = false;
+      if (document.getElementById('sl-play-btn')) {
+        document.getElementById('sl-play-btn').classList.remove('playing');
+        document.getElementById('sl-play-btn').innerHTML = '▶ Play Auto';
+      }
+      clearInterval(slideshowInterval);
+    }
+
     if (document.querySelector('.masonry-gallery a')) {
-      new SimpleLightbox('.masonry-gallery a', { 
+      // Inisialisasi SimpleLightbox dengan opsi kustom
+      lightboxInstance = new SimpleLightbox('.masonry-gallery a', { 
         overlayOpacity: 0.95, 
-        fadeSpeed: 150 
+        fadeSpeed: 150,
+        uniqueImages: false,
+        loop: true
       });
+
+      // 1. Tambahkan Tombol Play/Stop saat Lightbox Terbuka
+      lightboxInstance.on('show.simplelightbox', function() {
+        // Hapus tombol lama jika ada untuk menghindari duplikasi
+        const oldBtn = document.getElementById('sl-play-btn');
+        if (oldBtn) oldBtn.remove();
+
+        // Buat elemen tombol baru
+        const playBtn = document.createElement('button');
+        playBtn.id = 'sl-play-btn';
+        playBtn.innerHTML = '▶ Play Auto';
+        document.body.appendChild(playBtn);
+
+        // Event listener klik tombol On/Off gulir otomatis
+        playBtn.addEventListener('click', function(e) {
+          e.stopPropagation(); // Mencegah lightbox tertutup saat tombol diklik
+          if (!isSlideshowActive) {
+            startSlideshow();
+          } else {
+            stopSlideshow();
+          }
+        });
+      });
+
+      // 2. Matikan Slideshow otomatis jika pengguna menutup Lightbox secara manual
+      lightboxInstance.on('close.simplelightbox', function() {
+        stopSlideshow();
+        const playBtn = document.getElementById('sl-play-btn');
+        if (playBtn) playBtn.remove();
+      });
+
+      // 3. Reset interval jika pengguna mengklik tombol manual Next/Prev saat auto-play aktif
+      lightboxInstance.on('change.simplelightbox', function() {
+        if (isSlideshowActive) {
+          clearInterval(slideshowInterval);
+          startSlideshow();
+        }
+      });
+    }
+
+    // Lazy Load Video (Tetap dipertahankan)
+    const lazyVideos = document.querySelectorAll('.lazy-video');
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            let iframe = entry.target;
+            iframe.src = iframe.dataset.src;
+            observer.unobserve(iframe);
+          }
+        });
+      });
+      lazyVideos.forEach(video => videoObserver.observe(video));
+    } else {
+      lazyVideos.forEach(video => video.src = video.dataset.src);
     }
   });
 </script>
