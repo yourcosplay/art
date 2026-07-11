@@ -14,7 +14,7 @@ layout: default
     </div>
   </header>
 
-<!-- 2. Blok Multi-Video Embed (Otomatis Mengubah Link Biasa Menjadi Link Embed) -->
+  <!-- 2. Blok Multi-Video Player (Mendukung Direct Link MP4 & YouTube) -->
   {% if page.videos and page.videos.size != 0 %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
@@ -24,22 +24,46 @@ layout: default
             <h4>{{ video.title }}</h4>
           {% endif %}
           
-          <!-- LOGIKA OTOMATIS: Mengubah url agar ramah iframe browser HP -->
-          {% assign final_url = video.url %}
-          {% if video.url contains 'watch?v=' %}
-            {% assign final_url = video.url | replace: 'watch?v=', 'embed/' %}
-          {% elsif video.url contains 'youtu.be/' %}
-            {% assign final_url = video.url | replace: 'youtu.be/', 'www.youtube.com/embed/' %}
-          {% endif %}
-          
-          {% if video.ratio == "9-16" %}
-            <div class="video-wrapper-9-16">
-              <iframe src="{{ final_url }}" allowfullscreen></iframe>
-            </div>
+          <!-- Deteksi otomatis jenis link (Direct MP4 / Blogger vs YouTube Embed) -->
+          {% if video.url contains 'googlevideo.com' or video.url contains '.mp4' or video.url contains 'blogspot.com' %}
+            
+            <!-- JIKA DIRECT VIDEO: Gunakan tag <video> agar HP memunculkan pemutar asli -->
+            {% if video.ratio == "9-16" %}
+              <div class="video-wrapper-9-16" style="padding-bottom: 0; height: auto;">
+                <video controls width="100%" style="border-radius: 6px; background: #000; display: block; max-height: 80vh;">
+                  <source src="{{ video.url }}" type="video/mp4">
+                  Browser Anda tidak mendukung pemutar video.
+                </video>
+              </div>
+            {% else %}
+              <div class="video-wrapper-16-9" style="padding-bottom: 0; height: auto;">
+                <video controls width="100%" style="border-radius: 6px; background: #000; display: block;">
+                  <source src="{{ video.url }}" type="video/mp4">
+                  Browser Anda tidak mendukung pemutar video.
+                </video>
+              </div>
+            {% endif %}
+
           {% else %}
-            <div class="video-wrapper-16-9">
-              <iframe src="{{ final_url }}" allowfullscreen></iframe>
-            </div>
+            
+            <!-- JIKA YOUTUBE/IFRAME EMBED: Gunakan kode filter lama Anda -->
+            {% assign final_url = video.url %}
+            {% if video.url contains 'watch?v=' %}
+              {% assign final_url = video.url | replace: 'watch?v=', 'embed/' %}
+            {% elsif video.url contains 'youtu.be/' %}
+              {% assign final_url = video.url | replace: 'youtu.be/', 'www.youtube.com/embed/' %}
+            {% endif %}
+            
+            {% if video.ratio == "9-16" %}
+              <div class="video-wrapper-9-16">
+                <iframe src="{{ final_url }}" allowfullscreen></iframe>
+              </div>
+            {% else %}
+              <div class="video-wrapper-16-9">
+                <iframe src="{{ final_url }}" allowfullscreen></iframe>
+              </div>
+            {% endif %}
+
           {% endif %}
         </div>
       {% endfor %}
@@ -108,7 +132,6 @@ layout: default
       clearInterval(slideshowInterval);
     }
 
-    // Inisialisasi SimpleLightbox
     if (document.querySelector('.masonry-gallery a')) {
       lightboxInstance = new SimpleLightbox('.masonry-gallery a', { 
         overlayOpacity: 0.95, 
