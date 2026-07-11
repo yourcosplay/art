@@ -14,26 +14,25 @@ layout: default
     </div>
   </header>
 
-  <!-- 2. Blok Multi-Video Embed (Sistem Pengaman Otomatis Jika Data Kosong) -->
+  <!-- 2. Blok Multi-Video Embed (Instant Load Tanpa Lazy-Delay) -->
   {% if page.videos and page.videos.size != 0 %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
       {% for video in page.videos %}
         <div class="video-item-card">
-          <!-- Menampilkan judul jika ada, jika tidak ada, tag h4 ini otomatis diabaikan -->
+          <!-- Menampilkan judul jika ada -->
           {% if video.title and video.title != "" %}
             <h4>{{ video.title }}</h4>
           {% endif %}
           
-          <!-- Pengaman Otomatis: Jika rasio kosong atau bernilai "16-9", gunakan pembungkus lebar standar -->
+          <!-- Pengaman Otomatis Rasio Video Menggunakan SRC Instan -->
           {% if video.ratio == "9-16" %}
             <div class="video-wrapper-9-16">
-              <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
+              <iframe src="{{ video.url }}" allowfullscreen></iframe>
             </div>
           {% else %}
-            <!-- Default fallback: Jika tidak ditulis rasio apa pun, otomatis amankan ke 16-9 -->
             <div class="video-wrapper-16-9">
-              <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
+              <iframe src="{{ video.url }}" allowfullscreen></iframe>
             </div>
           {% endif %}
         </div>
@@ -73,7 +72,7 @@ layout: default
   {% endif %}
 </main>
 
-<!-- Sistem Kontrol Lightbox & Script Lazy Load Video Semesta -->
+<!-- Sistem Kontrol Lightbox Murni -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     let lightboxInstance = null;
@@ -93,7 +92,6 @@ layout: default
       }, slideshowDuration);
     }
 
-    // Fungsi stop slideshow otomatis
     function stopSlideshow() {
       isSlideshowActive = false;
       const playBtn = document.getElementById('sl-play-btn');
@@ -139,23 +137,6 @@ layout: default
           startSlideshow();
         }
       });
-    }
-
-    // Fungsi Pengaktif Lazy Load Video Terpercaya (Untuk HP & Desktop)
-    const lazyVideos = document.querySelectorAll('.lazy-video');
-    if ('IntersectionObserver' in window) {
-      const videoObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            let iframe = entry.target;
-            iframe.src = iframe.dataset.src;
-            videoObserver.unobserve(iframe);
-          }
-        });
-      });
-      lazyVideos.forEach(video => videoObserver.observe(video));
-    } else {
-      lazyVideos.forEach(video => video.src = video.dataset.src);
     }
   });
 </script>
