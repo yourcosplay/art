@@ -14,7 +14,7 @@ layout: default
     </div>
   </header>
 
-  <!-- 2. Blok Multi-Video Player (Mendukung Direct Link MP4 & YouTube) -->
+  <!-- 2. Blok Multi-Video Player Universal (Optimal untuk Desktop & Mobile) -->
   {% if page.videos and page.videos.size != 0 %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
@@ -24,20 +24,30 @@ layout: default
             <h4>{{ video.title }}</h4>
           {% endif %}
           
-          <!-- Deteksi otomatis jenis link (Direct MP4 / Blogger vs YouTube Embed) -->
+          <!-- Deteksi otomatis jenis link -->
           {% if video.url contains 'googlevideo.com' or video.url contains '.mp4' or video.url contains 'blogspot.com' %}
             
-            <!-- JIKA DIRECT VIDEO: Gunakan tag <video> agar HP memunculkan pemutar asli -->
+            <!-- CONFIGURATION FOR DIRECT VIDEO (Google Video/Blogger MP4) -->
             {% if video.ratio == "9-16" %}
               <div class="video-wrapper-9-16" style="padding-bottom: 0; height: auto;">
-                <video controls width="100%" style="border-radius: 6px; background: #000; display: block; max-height: 80vh;">
+                <video controls 
+                       playsinline 
+                       webkit-playsinline 
+                       preload="metadata" 
+                       width="100%" 
+                       style="border-radius: 6px; background: #000; display: block; max-height: 80vh;">
                   <source src="{{ video.url }}" type="video/mp4">
                   Browser Anda tidak mendukung pemutar video.
                 </video>
               </div>
             {% else %}
               <div class="video-wrapper-16-9" style="padding-bottom: 0; height: auto;">
-                <video controls width="100%" style="border-radius: 6px; background: #000; display: block;">
+                <video controls 
+                       playsinline 
+                       webkit-playsinline 
+                       preload="metadata" 
+                       width="100%" 
+                       style="border-radius: 6px; background: #000; display: block;">
                   <source src="{{ video.url }}" type="video/mp4">
                   Browser Anda tidak mendukung pemutar video.
                 </video>
@@ -46,7 +56,7 @@ layout: default
 
           {% else %}
             
-            <!-- JIKA YOUTUBE/IFRAME EMBED: Gunakan kode filter lama Anda -->
+            <!-- CONFIGURATION FOR YOUTUBE EMBED -->
             {% assign final_url = video.url %}
             {% if video.url contains 'watch?v=' %}
               {% assign final_url = video.url | replace: 'watch?v=', 'embed/' %}
@@ -54,16 +64,9 @@ layout: default
               {% assign final_url = video.url | replace: 'youtu.be/', 'www.youtube.com/embed/' %}
             {% endif %}
             
-            {% if video.ratio == "9-16" %}
-              <div class="video-wrapper-9-16">
-                <iframe src="{{ final_url }}" allowfullscreen></iframe>
-              </div>
-            {% else %}
-              <div class="video-wrapper-16-9">
-                <iframe src="{{ final_url }}" allowfullscreen></iframe>
-              </div>
-            {% endif %}
-
+            <div class="video-wrapper-16-9">
+              <iframe src="{{ final_url }}" allowfullscreen style="border:0;"></iframe>
+            </div>
           {% endif %}
         </div>
       {% endfor %}
