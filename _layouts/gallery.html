@@ -14,19 +14,25 @@ layout: default
     </div>
   </header>
 
-  <!-- 2. Blok Multi-Video Embed (Responsif & Lazy Load Aktif) -->
-  {% if page.videos %}
+  <!-- 2. Blok Multi-Video Embed (Sistem Pengaman Otomatis Jika Data Kosong) -->
+  {% if page.videos and page.videos.size != 0 %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
       {% for video in page.videos %}
         <div class="video-item-card">
-          <h4>{{ video.title }}</h4>
-          {% if video.ratio == "16-9" %}
-            <div class="video-wrapper-16-9">
+          <!-- Menampilkan judul jika ada, jika tidak ada, tag h4 ini otomatis diabaikan -->
+          {% if video.title and video.title != "" %}
+            <h4>{{ video.title }}</h4>
+          {% endif %}
+          
+          <!-- Pengaman Otomatis: Jika rasio kosong atau bernilai "16-9", gunakan pembungkus lebar standar -->
+          {% if video.ratio == "9-16" %}
+            <div class="video-wrapper-9-16">
               <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
             </div>
-          {% elsif video.ratio == "9-16" %}
-            <div class="video-wrapper-9-16">
+          {% else %}
+            <!-- Default fallback: Jika tidak ditulis rasio apa pun, otomatis amankan ke 16-9 -->
+            <div class="video-wrapper-16-9">
               <iframe data-src="{{ video.url }}" class="lazy-video" allowfullscreen></iframe>
             </div>
           {% endif %}
@@ -41,7 +47,7 @@ layout: default
     {{ content }}
   </article>
 
-  <!-- 4. Tombol Download Pack (Conditional Rendering) -->
+  <!-- 4. Tombol Download Pack -->
   {% if page.download_link and page.download_link != "" %}
   <div class="download-section">
     <a href="{{ page.download_link }}" target="_blank" rel="noopener noreferrer" class="btn-download">
@@ -73,7 +79,7 @@ layout: default
     let lightboxInstance = null;
     let slideshowInterval = null;
     let isSlideshowActive = false;
-    const slideshowDuration = 3000; // Durasi perpindahan gambar (3 detik)
+    const slideshowDuration = 3000;
 
     function startSlideshow() {
       isSlideshowActive = true;
@@ -87,6 +93,7 @@ layout: default
       }, slideshowDuration);
     }
 
+    // Fungsi stop slideshow otomatis
     function stopSlideshow() {
       isSlideshowActive = false;
       const playBtn = document.getElementById('sl-play-btn');
@@ -105,7 +112,6 @@ layout: default
         loop: true
       });
 
-      // Munculkan tombol On/Off Gulir saat Lightbox terbuka
       lightboxInstance.on('show.simplelightbox', function() {
         const oldBtn = document.getElementById('sl-play-btn');
         if (oldBtn) oldBtn.remove();
@@ -116,19 +122,17 @@ layout: default
         document.body.appendChild(playBtn);
 
         playBtn.addEventListener('click', function(e) {
-          e.stopPropagation(); // Mencegah tertutupnya lightbox saat tombol disentuh
+          e.stopPropagation();
           if (!isSlideshowActive) { startSlideshow(); } else { stopSlideshow(); }
         });
       });
 
-      // Bersihkan interval jika lightbox ditutup paksa
       lightboxInstance.on('close.simplelightbox', function() {
         stopSlideshow();
         const playBtn = document.getElementById('sl-play-btn');
         if (playBtn) playBtn.remove();
       });
 
-      // Reset interval kalkulasi waktu jika pengguna melakukan slide manual
       lightboxInstance.on('change.simplelightbox', function() {
         if (isSlideshowActive) {
           clearInterval(slideshowInterval);
