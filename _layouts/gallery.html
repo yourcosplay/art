@@ -14,25 +14,31 @@ layout: default
     </div>
   </header>
 
-  <!-- 2. Blok Multi-Video Embed (Instant Load Tanpa Lazy-Delay) -->
+<!-- 2. Blok Multi-Video Embed (Otomatis Mengubah Link Biasa Menjadi Link Embed) -->
   {% if page.videos and page.videos.size != 0 %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
       {% for video in page.videos %}
         <div class="video-item-card">
-          <!-- Menampilkan judul jika ada -->
           {% if video.title and video.title != "" %}
             <h4>{{ video.title }}</h4>
           {% endif %}
           
-          <!-- Pengaman Otomatis Rasio Video Menggunakan SRC Instan -->
+          <!-- LOGIKA OTOMATIS: Mengubah url agar ramah iframe browser HP -->
+          {% assign final_url = video.url %}
+          {% if video.url contains 'watch?v=' %}
+            {% assign final_url = video.url | replace: 'watch?v=', 'embed/' %}
+          {% elsif video.url contains 'youtu.be/' %}
+            {% assign final_url = video.url | replace: 'youtu.be/', 'www.youtube.com/embed/' %}
+          {% endif %}
+          
           {% if video.ratio == "9-16" %}
             <div class="video-wrapper-9-16">
-              <iframe src="{{ video.url }}" allowfullscreen></iframe>
+              <iframe src="{{ final_url }}" allowfullscreen></iframe>
             </div>
           {% else %}
             <div class="video-wrapper-16-9">
-              <iframe src="{{ video.url }}" allowfullscreen></iframe>
+              <iframe src="{{ final_url }}" allowfullscreen></iframe>
             </div>
           {% endif %}
         </div>
