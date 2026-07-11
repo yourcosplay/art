@@ -3,8 +3,9 @@ layout: default
 ---
 
 <main class="container">
+  <!-- 1. Judul Postingan & Metadata Kategori/Tag -->
   <header class="post-header">
-    <span class="category-badge">// {{ page.category | upcase }}</span>
+    <span class="category-badge">// {% if page.category.first %}{{ page.category.first | upcase }}{% else %}{{ page.category | upcase }}{% endif %}</span>
     <h1>{{ page.title }}</h1>
     <div class="post-tags">
       {% for tag in page.tags %}
@@ -13,6 +14,7 @@ layout: default
     </div>
   </header>
 
+  <!-- 2. Blok Multi-Video Embed (Responsif & Lazy Load Aktif) -->
   {% if page.videos %}
   <section class="video-gallery-container">
     <div class="video-grid-flex">
@@ -34,10 +36,12 @@ layout: default
   </section>
   {% endif %}
 
+  <!-- 3. Blok Deskripsi Konten & Kredit Kreator -->
   <article class="post-content">
     {{ content }}
   </article>
 
+  <!-- 4. Tombol Download Pack (Conditional Rendering) -->
   {% if page.download_link and page.download_link != "" %}
   <div class="download-section">
     <a href="{{ page.download_link }}" target="_blank" rel="noopener noreferrer" class="btn-download">
@@ -46,13 +50,14 @@ layout: default
   </div>
   {% endif %}
 
+  <!-- 5. Grid Galeri Foto Masonry (Terintegrasi Lightbox) -->
   {% if page.images %}
   <section class="gallery-section">
     <h3>Portfolio Gallery</h3>
     <div class="masonry-gallery">
       {% for img_url in page.images %}
         <div class="masonry-item">
-          <a href="{{ img_url }}" class="lightbox-trigger">
+          <a href="{{ img_url }}">
             <img src="{{ img_url }}" alt="Asset {{ forloop.index }}" loading="lazy">
           </a>
         </div>
@@ -62,74 +67,68 @@ layout: default
   {% endif %}
 </main>
 
+<!-- Sistem Kontrol Lightbox & Script Lazy Load Video Semesta -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     let lightboxInstance = null;
     let slideshowInterval = null;
     let isSlideshowActive = false;
-    const slideshowDuration = 3000; // Duration in milliseconds (3 seconds)
+    const slideshowDuration = 3000; // Durasi perpindahan gambar (3 detik)
 
     function startSlideshow() {
       isSlideshowActive = true;
-      document.getElementById('sl-play-btn').classList.add('playing');
-      document.getElementById('sl-play-btn').innerHTML = '⏸ Stop Auto';
-      
+      const playBtn = document.getElementById('sl-play-btn');
+      if (playBtn) {
+        playBtn.classList.add('playing');
+        playBtn.innerHTML = '⏸ Stop Auto';
+      }
       slideshowInterval = setInterval(() => {
-        if (lightboxInstance) {
-          lightboxInstance.next();
-        }
+        if (lightboxInstance) lightboxInstance.next();
       }, slideshowDuration);
     }
 
     function stopSlideshow() {
       isSlideshowActive = false;
-      if (document.getElementById('sl-play-btn')) {
-        document.getElementById('sl-play-btn').classList.remove('playing');
-        document.getElementById('sl-play-btn').innerHTML = '▶ Play Auto';
+      const playBtn = document.getElementById('sl-play-btn');
+      if (playBtn) {
+        playBtn.classList.remove('playing');
+        playBtn.innerHTML = '▶ Play Auto';
       }
       clearInterval(slideshowInterval);
     }
 
+    // Inisialisasi SimpleLightbox
     if (document.querySelector('.masonry-gallery a')) {
-      // Inisialisasi SimpleLightbox dengan opsi kustom
       lightboxInstance = new SimpleLightbox('.masonry-gallery a', { 
         overlayOpacity: 0.95, 
         fadeSpeed: 150,
-        uniqueImages: false,
         loop: true
       });
 
-      // 1. Tambahkan Tombol Play/Stop saat Lightbox Terbuka
+      // Munculkan tombol On/Off Gulir saat Lightbox terbuka
       lightboxInstance.on('show.simplelightbox', function() {
-        // Hapus tombol lama jika ada untuk menghindari duplikasi
         const oldBtn = document.getElementById('sl-play-btn');
         if (oldBtn) oldBtn.remove();
 
-        // Buat elemen tombol baru
         const playBtn = document.createElement('button');
         playBtn.id = 'sl-play-btn';
         playBtn.innerHTML = '▶ Play Auto';
         document.body.appendChild(playBtn);
 
-        // Event listener klik tombol On/Off gulir otomatis
         playBtn.addEventListener('click', function(e) {
-          e.stopPropagation(); // Mencegah lightbox tertutup saat tombol diklik
-          if (!isSlideshowActive) {
-            startSlideshow();
-          } else {
-            stopSlideshow();
-          }
+          e.stopPropagation(); // Mencegah tertutupnya lightbox saat tombol disentuh
+          if (!isSlideshowActive) { startSlideshow(); } else { stopSlideshow(); }
         });
       });
 
-      // 2. Matikan Slideshow otomatis jika pengguna menutup Lightbox secara manual
+      // Bersihkan interval jika lightbox ditutup paksa
       lightboxInstance.on('close.simplelightbox', function() {
         stopSlideshow();
         const playBtn = document.getElementById('sl-play-btn');
         if (playBtn) playBtn.remove();
       });
 
-      // 3. Reset interval jika pengguna mengklik tombol manual Next/Prev saat auto-play aktif
+      // Reset interval kalkulasi waktu jika pengguna melakukan slide manual
       lightboxInstance.on('change.simplelightbox', function() {
         if (isSlideshowActive) {
           clearInterval(slideshowInterval);
@@ -138,7 +137,7 @@ layout: default
       });
     }
 
-    // Lazy Load Video (Tetap dipertahankan)
+    // Fungsi Pengaktif Lazy Load Video Terpercaya (Untuk HP & Desktop)
     const lazyVideos = document.querySelectorAll('.lazy-video');
     if ('IntersectionObserver' in window) {
       const videoObserver = new IntersectionObserver((entries, observer) => {
@@ -146,7 +145,7 @@ layout: default
           if (entry.isIntersecting) {
             let iframe = entry.target;
             iframe.src = iframe.dataset.src;
-            observer.unobserve(iframe);
+            videoObserver.unobserve(iframe);
           }
         });
       });

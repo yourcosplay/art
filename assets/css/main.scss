@@ -124,6 +124,22 @@ body {
     height: 220px;
     background-size: cover;
     background-position: center;
+    position: relative;
+  }
+  
+  .card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(10, 10, 12, 0.75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: $accent-brand;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
   }
   
   .card-details {
@@ -140,7 +156,8 @@ body {
   
   .category-badge { color: $accent-brand; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; }
   h1 { font-size: 1.75rem; color: #ffffff; margin: 10px 0; line-height: 1.3; }
-  .tag-item { color: $text-secondary; margin: 0 4px; font-size: 0.8rem; }
+  .post-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+  .tag-item { color: $text-secondary; font-size: 0.8rem; }
 }
 
 .post-content {
@@ -170,24 +187,55 @@ body {
 }
 
 /* Tombol Download */
-.download-section .btn-download {
-  display: block; width: 100%; background-color: #ffffff; color: #000;
-  text-align: center; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: 600;
+.download-section {
+  margin: 30px 0;
+  width: 100%;
+  
+  .btn-download {
+    display: block; 
+    width: 100%; 
+    background-color: #ffffff; 
+    color: #000000;
+    text-align: center; 
+    padding: 14px; 
+    border-radius: 6px; 
+    text-decoration: none; 
+    font-weight: 600;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: #e5e7eb;
+    }
+  }
 }
 
-/* Multi-Video Layout */
-.video-gallery-container { width: 100%; margin: 20px 0; }
-.video-grid-flex { display: flex; flex-direction: column; gap: 16px; padding: 0; margin: 0; }
+/* Layout Multi-Video (Sistem Flex & Grid Baku) */
+.video-gallery-container { 
+  width: 100%; 
+  margin: 20px 0; 
+}
+.video-grid-flex { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  padding: 0; 
+  margin: 0; 
+}
 .video-item-card {
-  width: 100%; background: $bg-surface; padding: 12px; border-radius: 8px; border: 1px solid $border-color;
-  h4 { margin: 0 0 12px 0; color: #ffffff; }
+  width: 100%; 
+  background: $bg-surface; 
+  padding: 12px; 
+  border-radius: 8px; 
+  border: 1px solid $border-color;
+  
+  h4 { margin: 0 0 12px 0; color: #ffffff; font-size: 0.95rem; }
 }
 .video-wrapper-16-9 { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
 .video-wrapper-9-16 { position: relative; width: 100%; max-width: 320px; padding-bottom: 177.78%; height: 0; margin: 0 auto; }
 .video-wrapper-16-9 iframe, .video-wrapper-9-16 iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
 
 /* ========================================================
-   MEDIA BREAKPOINTS (DESKTOP OPTIMIZATION)
+   MEDIA BREAKPOINTS (OPTIMISASI MONITOR KOMPUTER / TABLET)
    ======================================================== */
 @media (min-width: 768px) {
   .main-navigation .nav-container { flex-direction: row; justify-content: space-between; height: 65px; padding: 0 24px; }
@@ -195,12 +243,20 @@ body {
   .homepage-grid { grid-template-columns: repeat(3, 1fr); }
   .post-header h1 { font-size: 2.25rem; }
   .masonry-gallery { column-count: 3; column-gap: 16px; }
-  .video-grid-flex { flex-direction: row; flex-wrap: wrap; }
-  .video-item-card { width: calc(50% - 8px); }
+  
+  /* Perbaikan susunan Video Grid Desktop */
+  .video-grid-flex { 
+    flex-direction: row !important; 
+    flex-wrap: wrap !important; 
+    justify-content: center !important;
+  }
+  .video-item-card { 
+    width: calc(50% - 12px) !important; 
+  }
 }
 
 /* ========================================================
-   FIX LIGHTBOX OPTIMIZATION (AUTO-GULIR & CONTROL CENTER)
+   FIX LIGHTBOX (LATAR GELAP GELITA & KONTROL DI TENGAH LAYAR)
    ======================================================== */
 
 .sl-overlay {
@@ -215,37 +271,31 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* --- Kustomisasi Tombol Navigasi Kiri & Kanan (Next/Prev) --- */
+/* Navigasi Panah Kiri & Kanan (Next / Prev) */
 .sl-wrapper .sl-navigation button {
-  width: 50px !important;  /* Memperbesar area tombol */
+  width: 50px !important;  
   height: 70px !important;
-  font-size: 2.5rem !important; /* Membuat ikon panah lebih besar */
+  font-size: 2.5rem !important; 
   color: #ffffff !important;
   opacity: 0.7;
   transition: all 0.2s ease;
-  background: rgba(0, 0, 0, 0.3) !important; /* Background transparan tipis agar kontras */
+  background: rgba(0, 0, 0, 0.3) !important; 
   border-radius: 6px;
 }
 .sl-wrapper .sl-navigation button:hover {
   opacity: 1;
   background: rgba(0, 0, 0, 0.6) !important;
 }
+.sl-wrapper .sl-navigation .sl-prev { left: 20px !important; }
+.sl-wrapper .sl-navigation .sl-next { right: 20px !important; }
 
-/* Menggeser posisi tombol navigasi agak ke tengah layar */
-.sl-wrapper .sl-navigation .sl-prev {
-  left: 20px !important; /* Didorong sedikit ke kanan */
-}
-.sl-wrapper .sl-navigation .sl-next {
-  right: 20px !important; /* Didorong sedikit ke kiri */
-}
-
-/* --- Kustomisasi Tombol Play/Stop Auto-Scroll --- */
+/* Tombol Kapsul On/Off Gulir Otomatis */
 #sl-play-btn {
   position: fixed;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10070; /* Di atas lapisan z-index bawaan SimpleLightbox */
+  z-index: 10070; 
   background-color: rgba(26, 26, 34, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -262,16 +312,13 @@ body {
   align-items: center;
   gap: 6px;
 }
-#sl-play-btn:hover {
-  background-color: #ffffff;
-  color: #0a0a0c;
-}
+#sl-play-btn:hover { background-color: #ffffff; color: #0a0a0c; }
 #sl-play-btn.playing {
-  border-color: #38bdf8; /* Warna aksen cyberpunk saat aktif bermain */
+  border-color: #38bdf8; 
   box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
 }
 
-/* --- Pengaturan Khusus untuk HP / Mobile --- */
+/* Optimasi Lightbox Sempurna Khusus HP */
 @media (max-width: 767px) {
   .sl-wrapper .sl-image {
     position: fixed !important;
@@ -295,7 +342,6 @@ body {
     margin: 0 auto !important;
   }
 
-  /* Menggeser navigasi lebih ke tengah lagi khusus di layar HP */
   .sl-wrapper .sl-navigation button {
     top: 50% !important;
     transform: translateY(-50%) !important;
@@ -307,7 +353,7 @@ body {
   .sl-wrapper .sl-navigation .sl-next { right: 10px !important; }
 
   #sl-play-btn {
-    bottom: 40px; /* Sedikit dinaikkan agar tidak tertutup bar navigasi browser bawaan HP */
+    bottom: 40px; 
     padding: 8px 16px;
     font-size: 0.8rem;
   }
