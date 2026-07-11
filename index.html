@@ -12,10 +12,18 @@ title: "Home - CosShowcase Gallery"
   <!-- Grid Postingan -->
   <section class="homepage-grid">
     {% for post in site.posts %}
-      <article class="post-card" data-category="{{ post.category | slugify }}">
+      <!-- Logika data-category mendukung array (multi-kategori) maupun string tunggal -->
+      <article class="post-card" data-category="{% if post.category %}{{ post.category | join: ' ' | slugify }}{% else %}unassigned{% endif %}">
         <a href="{{ post.url | relative_url }}">
           <div class="card-thumb" style="background-image: url('{{ post.featured_image }}');">
-            <span class="card-badge">{{ post.category | replace: '-', ' ' | upcase }}</span>
+            <!-- Menampilkan kategori pertama sebagai badge utama -->
+            <span class="card-badge">
+              {% if post.category.first %}
+                {{ post.category.first | replace: '-', ' ' | upcase }}
+              {% else %}
+                {{ post.category | replace: '-', ' ' | upcase }}
+              {% endif %}
+            </span>
           </div>
           <div class="card-details">
             <h2>{{ post.title }}</h2>
@@ -33,19 +41,25 @@ title: "Home - CosShowcase Gallery"
     const categoryLinks = document.querySelectorAll('.nav-categories a');
     const posts = document.querySelectorAll('.post-card');
     
-    // 1. Baca URL saat halaman pertama dimuat untuk melihat apakah ada filter aktif
+    // Membaca parameter URL (misal: ?cat=gravure)
     const urlParams = new URLSearchParams(window.location.search);
     let currentCategory = urlParams.get('cat') || 'semua';
     let searchQuery = '';
 
+    // Fungsi utama: Sinkronisasi Filter Kategori & Kata Kunci Pencarian
     function filterPosts() {
       posts.forEach(function(post) {
         let postTitle = post.querySelector('h2').textContent.toLowerCase();
-        let postCategory = post.getAttribute('data-category');
+        // Mengambil semua kategori dari data-attribute dan memecahnya menjadi array
+        let postCategories = (post.getAttribute('data-category') || '').split(' ');
 
+        // 1. Cek apakah judul mengandung kata kunci pencarian
         let matchSearch = postTitle.includes(searchQuery);
-        let matchCategory = (currentCategory === 'semua') || (postCategory === currentCategory);
+        
+        // 2. Cek apakah postingan masuk dalam kategori yang dipilih
+        let matchCategory = (currentCategory === 'semua') || (postCategories.includes(currentCategory));
 
+        // Tampilkan hanya jika cocok keduanya
         if (matchSearch && matchCategory) {
           post.style.display = "";
         } else {
@@ -53,7 +67,7 @@ title: "Home - CosShowcase Gallery"
         }
       });
 
-      // 2. Update warna tombol menu yang sedang aktif
+      // Update UI tombol kategori aktif
       categoryLinks.forEach(link => {
         if (link.getAttribute('data-filter') === currentCategory) {
           link.classList.add('active');
@@ -63,10 +77,10 @@ title: "Home - CosShowcase Gallery"
       });
     }
 
-    // Jalankan penyaringan otomatis saat masuk ke halaman utama
+    // Jalankan filter saat pertama kali halaman dimuat
     filterPosts();
 
-    // 3. Event Kolom Pencarian
+    // Event saat mengetik di kolom pencarian
     if (searchInput) {
       searchInput.addEventListener('input', function() {
         searchQuery = this.value.toLowerCase().trim();
@@ -74,19 +88,18 @@ title: "Home - CosShowcase Gallery"
       });
     }
 
-    // 4. Event Klik Kategori (Instan tanpa reload jika sudah di halaman utama)
+    // Event saat mengklik menu kategori
     categoryLinks.forEach(function(link) {
       link.addEventListener('click', function(e) {
-        if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname === '/art/') {
-          e.preventDefault();
-          currentCategory = this.getAttribute('data-filter');
-          
-          // Ubah URL secara visual tanpa memuat ulang halaman (lebih elegan)
-          const newUrl = currentCategory === 'semua' ? '/' : '/?cat=' + currentCategory;
-          window.history.pushState({}, '', newUrl);
-          
-          filterPosts();
-        }
+        e.preventDefault();
+        
+        currentCategory = this.getAttribute('data-filter');
+        
+        // Memperbarui URL tanpa refresh halaman
+        const newUrl = currentCategory === 'semua' ? '/' : '/?cat=' + currentCategory;
+        window.history.pushState({}, '', newUrl);
+        
+        filterPosts();
       });
     });
   });
